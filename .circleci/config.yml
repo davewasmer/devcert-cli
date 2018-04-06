@@ -1,0 +1,32 @@
+---
+version: 2
+jobs:
+  node-latest: &test
+    docker:
+      - image: node:latest
+    working_directory: ~/cli
+    environment:
+    steps:
+      - checkout
+      - restore_cache: &restore_cache
+          keys:
+            - v1-yarn-{{checksum ".circleci/config.yml"}}-{{ checksum "yarn.lock"}}
+            - v1-yarn-{{checksum ".circleci/config.yml"}}
+      - run: .circleci/greenkeeper
+      - run: yarn add -D nyc@11 @oclif/nyc-config@1 mocha-junit-reporter@1
+      - run: ./bin/run --version
+      - run: ./bin/run --help
+      - run: yarn test
+      - store_test_results: &store_test_results
+          path: ~/cli/reports
+  node-8:
+    <<: *test
+    docker:
+      - image: node:8
+
+workflows:
+  version: 2
+  "devcert-cli":
+    jobs:
+      - node-latest
+      - node-8
