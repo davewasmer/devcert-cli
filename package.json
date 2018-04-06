@@ -1,7 +1,7 @@
 {
   "name": "devcert-cli",
   "description": "A CLI wrapper for devcert, to manage development SSL/TLS certificates and domains",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "author": "Dave Wasmer @davewasmer",
   "bin": {
     "devcert": "./bin/run"
